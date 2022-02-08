@@ -65,22 +65,22 @@ namespace NewsAdManagementSystem_UI.Controllers
             }           
             return View();
         }
-        
+
         //GET Method
         [HttpGet]
         public async Task<IActionResult> EditEmployDetails(int EmpID)//Update EmployDetails 
         {
             EmployDetails employDetails = null;
-            using(HttpClient client=new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
                 string endPoint = _configuration["WebApiBaseUrl"] + "Employ/GetEmployDetailsByID?EmpID=" + EmpID;
-                using(var response=await client.GetAsync(endPoint))
+                using (var response = await client.GetAsync(endPoint))
                 {
-                    if(response.StatusCode==System.Net.HttpStatusCode.OK)
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         var result = await response.Content.ReadAsStringAsync();
                         employDetails = JsonConvert.DeserializeObject<EmployDetails>(result);
-                       
+
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace NewsAdManagementSystem_UI.Controllers
             {
                 StringContent content = new StringContent(JsonConvert.SerializeObject(employDetails), Encoding.UTF8, "application/json");
                 string endPoint = _configuration["WebApiBaseUrl"] + "Employ/UpdateEmploy";
-                using (var response = await client.PostAsync(endPoint, content))
+                using (var response = await client.PutAsync(endPoint, content))
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
@@ -110,6 +110,25 @@ namespace NewsAdManagementSystem_UI.Controllers
                 }
             }
             return View(employDetails);
+        }
+
+        //Delete Employ Record
+        public async Task<IActionResult> DeleteEmployDetails(int EmpID)//Delete EmployDetails 
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string endPoint = _configuration["WebApiBaseUrl"] + "Employ/DeleteEmploy?EmpID=" + EmpID;
+                using (var response = await client.DeleteAsync(endPoint))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+                        ViewBag.message = "Deleted Successfully";
+                    }
+                }
+            }
+            return RedirectToAction("ShowEmployDetails");
+
         }
 
     }
