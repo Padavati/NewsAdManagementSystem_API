@@ -71,35 +71,8 @@ namespace NewsAdManagementSystem_UI.Controllers
         }
         #endregion Register
 
-        #region Login
-        public IActionResult Login()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Login(EmployDetails employDetails)
-        {
-            ViewBag.status = "";
-            using (HttpClient client = new HttpClient())
-            {
-                StringContent content = new StringContent(JsonConvert.SerializeObject(employDetails), Encoding.UTF8, "application/json");
-                string endPoint = _configuration["WebApiBaseUrl"] + "Employ/Login";
-                using (var response = await client.PostAsync(endPoint, content))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                        return RedirectToAction("ShowEmployDetails");
-                    else
-                    {
-                        ViewBag.status = "Error";
-                        ViewBag.message = "Wrong credentials!";
-                    }
-                }
-            }
-            return View();
-        }
-        #endregion Login
-
         #region EditEmployDetails
+
         //GET Method
         [HttpGet]
         public async Task<IActionResult> EditEmployDetails(int EmpID)//Update EmployDetails 
@@ -148,8 +121,6 @@ namespace NewsAdManagementSystem_UI.Controllers
         #endregion EditEmployDetails
 
         #region DeleteEmployDetails
-
-        //Delete Employ Record
         public async Task<IActionResult> DeleteEmployDetails(int EmpID)//Delete EmployDetails 
         {
             using (HttpClient client = new HttpClient())
@@ -169,6 +140,35 @@ namespace NewsAdManagementSystem_UI.Controllers
         }
         #endregion DeleteEmployDetails
 
+        #region Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(EmployDetails employDetails)
+        {
+            ViewBag.status = "";
+            using (HttpClient client = new HttpClient())
+            {
+                StringContent content = new StringContent(JsonConvert.SerializeObject(employDetails), Encoding.UTF8, "application/json");
+                string endPoint = _configuration["WebApiBaseUrl"] + "Employ/Login";
+                using (var response = await client.PostAsync(endPoint, content))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                        return RedirectToAction("ShowEmployDetails");
+                    else
+                    {
+                        ViewBag.status = "Error";
+                        ViewBag.message = "Wrong credentials!";
+                    }
+                }
+            }
+            return View();
+        }
+        #endregion Login
     }
 }
+        
+
 

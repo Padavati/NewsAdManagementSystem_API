@@ -14,6 +14,7 @@ namespace NewsAdManagementSystem_Entity.Models
         public string CustName { get; set; }
         public string CustAddress { get; set; }
         public string CustContactNo { get; set; }
+        public string EmailID { get; set; }
         public DateTime DOR { get; set; }
         public string Pwd { get; set; }
     }
